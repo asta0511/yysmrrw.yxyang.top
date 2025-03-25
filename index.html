@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阴阳师任务清单</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+            --ios-background: #F2F2F7;
+            --ios-card: rgba(255, 255, 255, 0.7);
+            --ios-text: #1C1C1E;
+            --ios-secondary-text: #8E8E93;
+            --checkbox-color: #FFE000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: url('https://img.picui.cn/free/2025/03/25/67e25592b287c.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--ios-text);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(242, 242, 247, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 0;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1, h2, h3 {
+            color: #5D4037;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            background-image: linear-gradient(to right, #B79891, #94716B);
+            color: white;
+            padding: 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(93, 64, 55, 0.3);
+            background-size: 200% auto;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        
+        h2 {
+            font-size: 22px;
+            margin-top: 30px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(149, 113, 107, 0.2);
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            color: var(--ios-text);
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 15px 0;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        li {
+            padding: 12px 15px;
+            margin: 8px 0;
+            background-color: var(--ios-card);
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .task-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        li:active {
+            transform: scale(0.98);
+            background-color: rgba(183, 152, 145, 0.2);
+        }
+        
+        li::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(183, 152, 145, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        li:active::after {
+            opacity: 1;
+        }
+        
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--ios-secondary-text);
+            border-radius: 6px;
+            margin-left: 15px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: var(--checkbox-color);
+            border-color: var(--checkbox-color);
+        }
+        
+        input[type="checkbox"]:checked::after {
+            content: "✓";
+            position: absolute;
+            color: #5D4037;
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .time-indicator {
+            font-size: 14px;
+            color: var(--ios-secondary-text);
+            margin-top: 5px;
+            font-weight: normal;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-out;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .btn-grad {
+            background-image: linear-gradient(to right, #B79891, #94716B);
+            margin: 20px 0;
+            padding: 15px 45px;
+            text-align: center;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;            
+            box-shadow: 0 0 20px rgba(149, 113, 107, 0.2);
+            border-radius: 12px;
+            display: block;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            width: auto;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        
+        .btn-grad:hover {
+            background-position: right center;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .footer-note {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--ios-secondary-text);
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .signature {
+            background: linear-gradient(to right, #B79891, #94716B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+        
+        a {
+            color: #94716B;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .reset-btn {
+            background: rgba(149, 113, 107, 0.2);
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: #5D4037;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn:hover {
+            background: rgba(149, 113, 107, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>阴阳师任务清单</h1>
+        
+        <button class="btn-grad">🌸 今日任务</button>
+        
+        <div class="section">
+            <h2>每日繁花</h2>
+            <ul>
+                <li>
+                    <span class="task-content">🍥 每日签到</span>
+                    <input type="checkbox" id="daily-sign">
+                </li>
+                <li>
+                    <span class="task-content">🎎 友情点领取（好友列表左下角）</span>
+                    <input type="checkbox" id="friend-point">
+                </li>
+                <li>
+                    <span class="task-content">🦊 封印悬赏（一天两次）</span>
+                    <input type="checkbox" id="seal-quest">
+                </li>
+                <li>
+                    <span class="task-content">🏮 结界寄养（可代挂）</span>
+                    <input type="checkbox" id="boundary-foster">
+                </li>
+                <li>
+                    <span class="task-content">🍵 寮30协作</span>
+                    <input type="checkbox" id="guild-30">
+                </li>
+                <li>
+                    <span class="task-content">🌌 逢魔之时（四下探索）</span>
+                    <input type="checkbox" id="dusk-explore">
+                </li>
+                <li>
+                    <span class="task-content">🐉 逢魔首领挑战</span>
+                    <input type="checkbox" id="dusk-boss">
+                </li>
+                <li>
+                    <span class="task-content">🎴 花合战（30次达成）</span>
+                    <input type="checkbox" id="flower-battle">
+                </li>
+                <li>
+                    <span class="task-content">🐾 宠物照料（喂食+御魂）</span>
+                    <input type="checkbox" id="pet-care">
+                </li>
+                <li>
+                    <span class="task-content">🌠 终身勾玉卡</span>
+                    <input type="checkbox" id="jade-card">
+                </li>
+                <li>
+                    <span class="task-content">🖌️ 大神签到</span>
+                    <input type="checkbox" id="ds-sign">
+                </li>
+                <li>
+                    <span class="task-content">🎁 黑蛋礼包领取</span>
+                    <input type="checkbox" id="black-egg">
+                </li>
+                <li>
+                    <span class="task-content">🧪 经验妖怪x2（开加成）</span>
+                    <input type="checkbox" id="exp-monster">
+                </li>
+                <li>
+                    <span class="task-content">🪙 金币妖怪x2</span>
+                    <input type="checkbox" id="coin-monster">
+                </li>
+                <li>
+                    <span class="task-content">🎏 每日免费召唤</span>
+                    <input type="checkbox" id="free-summon">
+                </li>
+                <li>
+                    <span class="task-content">📜 寮俸禄领取</span>
+                    <input type="checkbox" id="guild-salary">
+                </li>
+            </ul>
+        </div>
+        
+        <button class="btn-grad">🌙 本周任务</button>
+        
+        <div class="section" style="animation-delay: 0.1s;">
+            <h2>周常月影</h2>
+            <ul>
+                <li>
+                    <span class="task-content">🛍️ 荣誉商店采购</span>
+                    <input type="checkbox" id="honor-shop">
+                </li>
+                <li>
+                    <span class="task-content">🏅 勋章兑换</span>
+                    <input type="checkbox" id="medal-exchange">
+                </li>
+                <li>
+                    <span class="task-content">🏹 寮功勋兑换</span>
+                    <input type="checkbox" id="guild-contrib">
+                </li>
+                <li>
+                    <span class="task-content">🗺️ 地域鬼王分享</span>
+                    <input type="checkbox" id="region-boss">
+                </li>
+                <li>
+                    <span class="task-content">🏇 秘闻竞速挑战</span>
+                    <input type="checkbox" id="secret-race">
+                </li>
+                <li>
+                    <span class="task-content">📸 秘闻战绩分享</span>
+                    <input type="checkbox" id="secret-share">
+                </li>
+                <li>
+                    <span class="task-content">🐍 真蛇逆袭x2</span>
+                    <input type="checkbox" id="true-snake">
+                </li>
+                <li>
+                    <span class="task-content">💸 寄售屋扫货</span>
+                    <input type="checkbox" id="consignment">
+                </li>
+                <li>
+                    <span class="task-content">📖 图鉴分享</span>
+                    <input type="checkbox" id="illustration">
+                </li>
+                <li>
+                    <span class="task-content">🐍 蛇皮商店淘宝</span>
+                    <input type="checkbox" id="snake-skin">
+                </li>
+                <li>
+                    <span class="task-content">⚔️ 斗技积分冲刺</span>
+                    <input type="checkbox" id="pvp-point">
+                </li>
+            </ul>
+        </div>
+        
+        <button class="btn-grad">🏯 寮活动</button>
+        
+        <div class="section" style="animation-delay: 0.2s;">
+            <h2>寮事绘卷</h2>
+            
+            <h3>月曜~木曜</h3>
+            <p class="time-indicator">暮色四合时（19:00）</p>
+            <ul>
+                <li>
+                    <span class="task-content">🚪 阴界之门（组队秘境）</span>
+                    <input type="checkbox" id="spirit-gate">
+                </li>
+                <li>
+                    <span class="task-content">🏟️ 道馆攻坚战</span>
+                    <input type="checkbox" id="guild-hall">
+                </li>
+            </ul>
+            
+            <h3>金曜~日曜</h3>
+            <p class="time-indicator">黄昏时刻（19:00）</p>
+            <ul>
+                <li>
+                    <span class="task-content">🌕 月之羽姬降临</span>
+                    <input type="checkbox" id="moon-princess">
+                </li>
+            </ul>
+            
+            <h3>土曜特别</h3>
+            <p class="time-indicator">晨曦至星夜（10:00-23:00）</p>
+            <ul>
+                <li>
+                    <span class="task-content">🦁 百鬼退治（狩猎战）</span>
+                    <input type="checkbox" id="hunt-war">
+                </li>
+            </ul>
+        </div>
+        
+        <div class="footer-note">
+            本列表由<span class="signature">阳小楊</span>整理<br>
+            如果错误，请联系<a href="mailto:yxyan0511@163.com">yxyan0511@163.com</a>
+            <a href="https://www.yxyang.top" class="btn-grad" style="margin-top: 15px;">访问我的网站</a>
+            <button class="reset-btn" id="resetBtn">重置所有任务</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有复选框
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            // 从本地存储加载已保存的状态
+            function loadCheckboxStates() {
+                checkboxes.forEach(checkbox => {
+                    const savedState = localStorage.getItem(checkbox.id);
+                    if (savedState === 'true') {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+            
+            // 保存复选框状态到本地存储
+            function saveCheckboxState(checkbox) {
+                localStorage.setItem(checkbox.id, checkbox.checked);
+            }
+            
+            // 重置所有任务
+            function resetAllTasks() {
+                if (confirm('确定要重置所有任务状态吗？')) {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                        localStorage.setItem(checkbox.id, false);
+                    });
+                }
+            }
+            
+            // 初始化 - 加载保存的状态
+            loadCheckboxStates();
+            
+            // 为每个复选框添加事件监听器
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    saveCheckboxState(this);
+                    if (this.checked) {
+                        this.parentElement.classList.add('bounce');
+                        setTimeout(() => {
+                            this.parentElement.classList.remove('bounce');
+                        }, 500);
+                    }
+                });
+            });
+            
+            // 为列表项添加点击事件
+            const listItems = document.querySelectorAll('li');
+            listItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SPAN') {
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                        saveCheckboxState(checkbox);
+                        if (checkbox.checked) {
+                            this.classList.add('bounce');
+                            setTimeout(() => {
+                                this.classList.remove('bounce');
+                            }, 500);
+                        }
+                    }
+                });
+            });
+            
+            // 为按钮添加渐变动画
+            const buttons = document.querySelectorAll('.btn-grad');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.backgroundPosition = 'right center';
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.style.backgroundPosition = 'left center';
+                });
+            });
+            
+            // 重置按钮事件
+            document.getElementById('resetBtn').addEventListener('click', resetAllTasks);
+            
+            // 每天凌晨自动重置每日任务
+            function checkForDailyReset() {
+                const now = new Date();
+                const lastReset = localStorage.getItem('lastResetDate');
+                const today = now.toDateString();
+                
+                if (lastReset !== today) {
+                    // 重置每日任务
+                    const dailyTasks = [
+                        'daily-sign', 'friend-point', 'seal-quest', 'boundary-foster',
+                        'guild-30', 'dusk-explore', 'dusk-boss', 'flower-battle',
+                        'pet-care', 'jade-card', 'ds-sign', 'black-egg',
+                        'exp-monster', 'coin-monster', 'free-summon', 'guild-salary'
+                    ];
+                    
+                    dailyTasks.forEach(taskId => {
+                        const checkbox = document.getElementById(taskId);
+                        if (checkbox) {
+                            checkbox.checked = false;
+                            localStorage.setItem(taskId, false);
+                        }
+                    });
+                    
+                    localStorage.setItem('lastResetDate', today);
+                }
+            }
+            
+            // 检查是否需要每日重置
+            checkForDailyReset();
+        });
+    </script>
+</body>
+</html>
